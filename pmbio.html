@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pakistan Biography</title>
+    <meta name="title" content="Annie | Portfolio">
+    <meta name="description" content="This is a personal portfolio html template made by codewithsadee">
+    <link rel="shortcut icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/require.css">
+    <link rel="stylesheet" href="../../assets/css/pages/portfolio.css">
+</head>
+
+<body>
+
+    <header class="header" data-header>
+        <div class="container">
+            <a href="../../index.html" class="logo">
+                <img src="../../assets/images/logo.svg" width="151" height="28" alt="Annie home">
+            </a>
+            <nav class="navbar" data-navbar>
+                <ul class="navbar-list">
+                    <li class="navbar-item">
+                        <a href="../../index.html" class="label-lg navbar-link has-after">Home</a>
+                    </li>
+                    <li class="navbar-item">
+                        <a href="../../service.html" class="label-lg navbar-link has-after">Services</a>
+                    </li>
+                    <li class="navbar-item">
+                        <a href="#" class="label-lg navbar-link has-after active">Biography</a>
+                    </li>
+                    <li class="navbar-item">
+                        <a href="../../contact.html" class="label-lg navbar-link has-after">Contact</a>
+                    </li>
+                </ul>
+            </nav>
+            <a href=".././/contact.html" class="btn btn-primary">Contact Now</a>
+            <button class="nav-toggle-btn" aria-label="menu" data-nav-toggler>
+                <ion-icon name="menu-outline" aria-hidden="true"></ion-icon>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <article>
+            <section class="section portfolio" aria-labelledby="portfolio-label">
+                <div class="container">
+                    <h2 class="section-title headline-md text-center" id="portfolio-label"></h2>
+        
+                    <ul class="portfolio-list" id="portfolio-list">
+                        <!-- Dynamic content will be inserted here -->
+                    </ul>
+                </div>
+            </section>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <ul class="social-list">
+                <!-- Social Links Here -->
+            </ul>
+            <p class="text-center">&copy; 2022 copyright all right reserved</p>
+        </div>
+    </footer>
+
+    <script src="../../assets/js/script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        // Fetch PM details based on selected PM ID stored in session storage
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectedPmId = sessionStorage.getItem('selectedPmId');  // Get the selected PM ID from session storage
+            if (selectedPmId) {
+                fetch(`http://127.0.0.1:8000/api/prime-minister/${selectedPmId}/`)  // Make a GET request to fetch PM details
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();  // Parse the JSON response
+                    })
+                    .then(data => {
+                        renderPmDetails(data);  // Call a function to render the PM details
+                    })
+                    .catch(error => console.error('Error fetching PM details:', error));
+            } else {
+                console.error('No selected PM ID found in session storage.');
+            }
+        });
+
+        // Function to render the fetched Prime Minister details
+        function renderPmDetails(pm) {
+            // Set the title
+            const titleElement = document.getElementById('portfolio-label');
+            titleElement.textContent = pm.name;
+
+            // Get the portfolio list element
+            const portfolioList = document.getElementById('portfolio-list');
+
+            // Create the HTML structure for the Prime Minister's biography
+            const bioHTML = `
+                <li>
+                    <div class="portfolio-card">
+                        <div class="card-banner img-holder" style="--width: 800;">
+                            <img src="${pm.image_url}" width="800" height="540" loading="lazy" alt="${pm.name}"
+                                class="img-cover">
+                            <a href="#" class="btn-icon" aria-label="More about ${pm.name}">
+                                <ion-icon name="arrow-forward-sharp" aria-hidden="true"></ion-icon>
+                            </a>
+                        </div>
+                        <div class="card-content">
+                            <span class="chip label-md">${pm.term}</span>
+                            <p class="card-text">${pm.english_bio}</p>
+                            <hr>
+                            <p class="card-text" style="justify-content: center; text-align: right;">${pm.urdu_bio}</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="portfolio-card">
+                        <div class="card-content">
+                                    <h3 class="title-md">Achievements</h3>
+                                    <p class="card-text">
+                                    ${pm.english_achievements}
+                                    </p>
+                                </div>
+                                <div class="card-content" style="justify-content: center; text-align: right;">
+                                    <h3 class="title-md"> کارنامے</h3>
+                                    <p class="card-text" style="justify-content: center; text-align: right;">
+                                    ${pm.urdu_achievements}
+                                    </p>
+                                </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="portfolio-card">
+                        <div class="card-banner img-holder" style="width: 500px; height: 300px;">
+                            ${pm.youtube_link}
+                        </div>
+                        <div class="card-content">
+                            <span class="chip label-md">YouTube Playlists</span>
+                            <h3 class="title-md">Visit our Playlist for Prime Ministers of Pakistan</h3>
+                            <p class="card-text">
+                                You can find playlists for biography of famous Pakistani public figures on our
+                                page <b>Pakistan Biography</b> on YouTube
+                            </p>
+                            <a href="https://www.youtube.com/watch?v=FMvwMdlYKv4&list=PLMyS4lO4wkoLzqFAm20ftWaTbKSgCHzv4&pp=iAQB"
+                                class="btn btn-primary">View Playlist on YouTube</a>
+                        </div>
+                    </div>
+                </li>
+            `;
+
+            // Append the biography HTML to the portfolio list
+            portfolioList.innerHTML = bioHTML;
+        }
+    </script>
+    <style>
+        html, body {
+    margin: 0;
+    padding: 0;
+    height: auto;   /* or 100% if you want it to stretch */
+    overflow: auto; /* Allow overflow */
+}
+
+.container {
+    padding: 20px;  /* Add some padding for aesthetics */
+}
+
+    </style>
+</body>
+
+</html>
